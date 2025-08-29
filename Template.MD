@@ -1,5 +1,5 @@
 ```markdown
-# How to Solve Dynamic Programming (DP) Problems on Strings: A Template and 4-Step Approach
+# How to Solve Dynamic Programming (DP) Problems on Strings: A Template and 4-Step Approach (Java Focus)
 
 This guide provides a structured approach to tackle Dynamic Programming problems involving strings, offering a template and a detailed 4-step process. While the original post used C++, this version focuses on Java implementations and provides more in-depth explanations for beginners.
 
@@ -49,7 +49,7 @@ int[][] dp = new int[m + 1][n + 1];
 
 for (int i = 1; i <= m; i++) { // Iterate through string s1
     for (int j = 1; j <= n; j++) { // Iterate through string s2
-        // Note: s1[i-1] and s2[j-1] are used to access current characters
+        // Note: s1.charAt(i-1) and s2.charAt(j-1) are used to access current characters
         // because dp[i][j] corresponds to substrings of length i and j.
         if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
             /* Your code for matching characters */
@@ -79,9 +79,9 @@ for (int i = 0; i < n; i++) {
 }
 
 // Base cases for two characters (length 2) - if needed
-for (int i = 0; i < n - 1; i++) {
-    // dp[i][i+1] logic
-}
+// for (int i = 0; i < n - 1; i++) {
+//     // dp[i][i+1] logic
+// }
 
 for (int len = 2; len <= n; len++) { // Iterate through substring lengths
     for (int i = 0; i <= n - len; i++) { // Iterate through start indices
@@ -154,13 +154,13 @@ Let's apply these steps to common string DP problems.
 
 *   **Step 2: Pre-processing & Base Cases**
     *   `dp[i][j]` will represent the minimum operations to convert `word1[0...i-1]` to `word2[0...j-1]`.
-    *   **`dp` table size:** `(m+1) x (n+1)` where `m` is `word1.length()` and `n` is `word2.length()`.
+    *   **`dp` table size:** $(m+1) \times (n+1)$ where $m$ is `word1.length()` and $n$ is `word2.length()`.
     *   **Base Case 1:** `dp[0][0] = 0`. (Empty string to empty string requires 0 operations).
-    *   **Base Case 2:** If `word1` is empty (`i=0`), to convert it to `word2[0...j-1]`, we need `j` insertions. So, `dp[0][j] = j`.
-    *   **Base Case 3:** If `word2` is empty (`j=0`), to convert `word1[0...i-1]` to an empty string, we need `i` deletions. So, `dp[i][0] = i`.
+    *   **Base Case 2:** If `word1` is empty ($i=0$), to convert it to `word2[0...j-1]`, we need $j$ insertions. So, `dp[0][j] = j`.
+    *   **Base Case 3:** If `word2` is empty ($j=0$), to convert `word1[0...i-1]` to an empty string, we need $i$ deletions. So, `dp[i][0] = i`.
 
 *   **Step 3: Define the Recurrence Relation**
-    *   Iterate `i` from `1` to `m`, `j` from `1` to `n`.
+    *   Iterate $i$ from $1$ to $m$, $j$ from $1$ to $n$.
     *   **If `word1.charAt(i-1) == word2.charAt(j-1)` (Matching characters):**
         *   No operation needed for these characters. The cost is the same as converting `word1[0...i-2]` to `word2[0...j-2]`.
         *   `dp[i][j] = dp[i-1][j-1]`
@@ -169,7 +169,7 @@ Let's apply these steps to common string DP problems.
             1.  **Insert:** Insert `word2.charAt(j-1)` into `word1`. This is equivalent to solving `dp[i][j-1]` (where `word1[0...i-1]` is matched against `word2[0...j-2]`) and then adding 1 for the insertion. `dp[i][j-1] + 1`
             2.  **Delete:** Delete `word1.charAt(i-1)`. This is equivalent to solving `dp[i-1][j]` (where `word1[0...i-2]` is matched against `word2[0...j-1]`) and then adding 1 for the deletion. `dp[i-1][j] + 1`
             3.  **Replace:** Replace `word1.charAt(i-1)` with `word2.charAt(j-1)`. This is equivalent to solving `dp[i-1][j-1]` (where both characters are now considered "matched" after replacement) and then adding 1 for the replacement. `dp[i-1][j-1] + 1`
-        *   `dp[i][j] = min(dp[i-1][j-1], dp[i][j-1], dp[i-1][j]) + 1`
+        *   `dp[i][j] = \min(dp[i-1][j-1], dp[i][j-1], dp[i-1][j]) + 1`
 
 *   **Step 4: Implement and Return**
 
@@ -218,7 +218,7 @@ class Solution {
 
 *   **Problem Statement:** Given two strings `word1` and `word2`, return the minimum number of steps required to make `word1` and `word2` the same. In one step, you can delete exactly one character from either string.
 
-*   **Quick Explanation:** This problem is equivalent to finding the Longest Common Subsequence (LCS) length. If LCS length is `L`, and string lengths are `m` and `n`, then the minimum deletions needed are `(m - L) + (n - L)`. However, we can also solve it directly with DP.
+*   **Quick Explanation:** This problem is equivalent to finding the Longest Common Subsequence (LCS) length. If LCS length is $L$, and string lengths are $m$ and $n$, then the minimum deletions needed are $(m - L) + (n - L)$. However, we can also solve it directly with DP.
 
 *   **Step 1: Understand the Problem**
     *   Goal: Make `word1` and `word2` identical by deleting characters.
@@ -227,21 +227,21 @@ class Solution {
 
 *   **Step 2: Pre-processing & Base Cases**
     *   `dp[i][j]` will represent the minimum deletions required to make `word1[0...i-1]` and `word2[0...j-1]` equal.
-    *   **`dp` table size:** `(m+1) x (n+1)`.
+    *   **`dp` table size:** $(m+1) \times (n+1)$.
     *   **Base Case 1:** `dp[0][0] = 0`. (Empty string to empty string requires 0 deletions).
-    *   **Base Case 2:** If `word1` is empty (`i=0`), to make it equal to `word2[0...j-1]`, we must delete all `j` characters from `word2`. So, `dp[0][j] = j`.
-    *   **Base Case 3:** If `word2` is empty (`j=0`), to make it equal to `word1[0...i-1]`, we must delete all `i` characters from `word1`. So, `dp[i][0] = i`.
+    *   **Base Case 2:** If `word1` is empty ($i=0$), to make it equal to `word2[0...j-1]`, we must delete all $j$ characters from `word2`. So, `dp[0][j] = j$.
+    *   **Base Case 3:** If `word2` is empty ($j=0$), to make it equal to `word1[0...i-1]`, we must delete all $i$ characters from `word1`. So, `dp[i][0] = i`.
 
 *   **Step 3: Define the Recurrence Relation**
-    *   Iterate `i` from `1` to `m`, `j` from `1` to `n`.
+    *   Iterate $i$ from $1$ to $m$, $j$ from $1$ to $n$.
     *   **If `word1.charAt(i-1) == word2.charAt(j-1)` (Matching characters):**
         *   No deletion needed for these characters. The cost is the same as making `word1[0...i-2]` and `word2[0...j-2]` equal.
         *   `dp[i][j] = dp[i-1][j-1]`
     *   **If `word1.charAt(i-1) != word2.charAt(j-1)` (Non-matching characters):**
         *   We must delete one of the current characters. We choose the option that leads to minimum deletions:
-            1.  Delete `word1.charAt(i-1)`: Cost is `1 + dp[i-1][j]` (solve for `word1[0...i-2]` and `word2[0...j-1]`).
-            2.  Delete `word2.charAt(j-1)`: Cost is `1 + dp[i][j-1]` (solve for `word1[0...i-1]` and `word2[0...j-2]`).
-        *   `dp[i][j] = Math.min(dp[i-1][j], dp[i][j-1]) + 1`
+            1.  Delete `word1.charAt(i-1)`: Cost is $1 + dp[i-1][j]$ (solve for `word1[0...i-2]` and `word2[0...j-1]`).
+            2.  Delete `word2.charAt(j-1)`: Cost is $1 + dp[i][j-1]$ (solve for `word1[0...i-1]` and `word2[0...j-2]`).
+        *   `dp[i][j] = \min(dp[i-1][j], dp[i][j-1]) + 1`
 
 *   **Step 4: Implement and Return**
 
@@ -283,7 +283,7 @@ class Solution {
 
 *   **Problem Statement:** Given two strings `s1` and `s2`, return the lowest ASCII sum of deleted characters to make two strings equal.
 
-*   **Similarity to Problem 2:** This is very similar to "Delete Operations for Two Strings". The key difference is that instead of counting `1` for each deletion, we sum the ASCII values of the deleted characters.
+*   **Similarity to Problem 2:** This is very similar to "Delete Operations for Two Strings". The key difference is that instead of counting $1$ for each deletion, we sum the ASCII values of the deleted characters.
 
 *   **Step 1: Understand the Problem**
     *   Goal: Make `s1` and `s2` identical.
@@ -292,13 +292,13 @@ class Solution {
 
 *   **Step 2: Pre-processing & Base Cases**
     *   `dp[i][j]` will represent the minimum ASCII sum of deleted characters to make `s1[0...i-1]` and `s2[0...j-1]` equal.
-    *   **`dp` table size:** `(m+1) x (n+1)`.
+    *   **`dp` table size:** $(m+1) \times (n+1)$.
     *   **Base Case 1:** `dp[0][0] = 0`.
-    *   **Base Case 2:** If `s1` is empty (`i=0`), to make it equal to `s2[0...j-1]`, we must delete all characters from `s2`. The sum of ASCII values for `s2[0...j-1]` is needed. So, `dp[0][j] = dp[0][j-1] + s2.charAt(j-1)`.
-    *   **Base Case 3:** If `s2` is empty (`j=0`), to make it equal to `s1[0...i-1]`, we must delete all characters from `s1`. The sum of ASCII values for `s1[0...i-1]` is needed. So, `dp[i][0] = dp[i-1][0] + s1.charAt(i-1)`.
+    *   **Base Case 2:** If `s1` is empty ($i=0$), to make it equal to `s2[0...j-1]`, we must delete all characters from `s2`. The sum of ASCII values for `s2[0...j-1]` is needed. So, `dp[0][j] = dp[0][j-1] + s2.charAt(j-1)`.
+    *   **Base Case 3:** If `s2` is empty ($j=0$), to make it equal to `s1[0...i-1]`, we must delete all characters from `s1`. The sum of ASCII values for `s1[0...i-1]` is needed. So, `dp[i][0] = dp[i-1][0] + s1.charAt(i-1)`.
 
 *   **Step 3: Define the Recurrence Relation**
-    *   Iterate `i` from `1` to `m`, `j` from `1` to `n`.
+    *   Iterate $i$ from $1$ to $m$, $j$ from $1$ to $n$.
     *   **If `s1.charAt(i-1) == s2.charAt(j-1)` (Matching characters):**
         *   No deletion needed for these characters.
         *   `dp[i][j] = dp[i-1][j-1]`
@@ -306,7 +306,7 @@ class Solution {
         *   We must delete one of the current characters. We add its ASCII value to the subproblem's cost.
             1.  Delete `s1.charAt(i-1)`: Cost is `s1.charAt(i-1) + dp[i-1][j]`.
             2.  Delete `s2.charAt(j-1)`: Cost is `s2.charAt(j-1) + dp[i][j-1]`.
-        *   `dp[i][j] = Math.min(s1.charAt(i-1) + dp[i-1][j], s2.charAt(j-1) + dp[i][j-1])`
+        *   `dp[i][j] = \min(s1.charAt(i-1) + dp[i-1][j], s2.charAt(j-1) + dp[i][j-1])`
 
 *   **Step 4: Implement and Return**
 
@@ -362,24 +362,24 @@ class Solution {
 *   **Step 2: Pre-processing & Base Cases**
     *   This is a single-string problem, so we use the Interval DP template.
     *   `dp[i][j]` will represent the length of the longest palindromic subsequence within the substring `s[i...j]`.
-    *   **`dp` table size:** `n x n` where `n` is `s.length()`.
+    *   **`dp` table size:** $n \times n$ where $n$ is `s.length()`.
     *   **Base Case 1 (Length 1):** Every single character is a palindrome of length 1.
-        *   `dp[i][i] = 1` for all `i` from `0` to `n-1`.
+        *   `dp[i][i] = 1` for all $i$ from $0$ to $n-1$.
 
 *   **Step 3: Define the Recurrence Relation**
-    *   Iterate `len` from `2` to `n` (length of substring).
-    *   Iterate `i` from `0` to `n - len` (start index).
-    *   `j = i + len - 1` (end index).
+    *   Iterate `len` from $2$ to $n$ (length of substring).
+    *   Iterate $i$ from $0$ to $n - len$ (start index).
+    *   $j = i + len - 1$ (end index).
     *   **If `s.charAt(i) == s.charAt(j)` (Outer characters match):**
         *   These two characters can form part of the palindrome. We add 2 to the length of the palindromic subsequence found in the inner substring `s[i+1...j-1]`.
-        *   If `len == 2`, `s[i+1...j-1]` is empty, so `dp[i+1][j-1]` would be 0. This correctly gives `2`.
+        *   If `len == 2`, `s[i+1...j-1]` is empty, so `dp[i+1][j-1]` would be 0. This correctly gives $2$.
         *   `dp[i][j] = 2 + dp[i+1][j-1]`
-    *   **If `s.charAt(i) != s.charAt(j)` (Outer characters don't match):**
+    *   **If `s.charAt(i) != s.charAt(j)` (Non-matching characters):**
         *   We cannot include both `s.charAt(i)` and `s.charAt(j)` in the palindrome.
         *   We have two options:
             1.  Exclude `s.charAt(i)`: Find the LPS in `s[i+1...j]`. This is `dp[i+1][j]`.
             2.  Exclude `s.charAt(j)`: Find the LPS in `s[i...j-1]`. This is `dp[i][j-1]`.
-        *   Take the maximum of these two options: `dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1])`
+        *   Take the maximum of these two options: `dp[i][j] = \max(dp[i+1][j], dp[i][j-1])`
 
 *   **Step 4: Implement and Return**
 
@@ -433,21 +433,21 @@ class Solution {
 *   **Step 2: Pre-processing & Base Cases**
     *   This is also a single-string problem (Interval DP).
     *   `dp[i][j]` will be a boolean value: `true` if `s[i...j]` is a palindrome, `false` otherwise.
-    *   **`dp` table size:** `n x n`.
+    *   **`dp` table size:** $n \times n$.
     *   **Base Case 1 (Length 1):** Every single character is a palindrome.
-        *   `dp[i][i] = true` for all `i` from `0` to `n-1`. Initialize `count = n`.
+        *   `dp[i][i] = true` for all $i$ from $0$ to $n-1$. Initialize `count = n`.
     *   **Base Case 2 (Length 2):** Check adjacent characters.
         *   If `s.charAt(i) == s.charAt(i+1)`, then `s[i...i+1]` is a palindrome.
         *   `dp[i][i+1] = true`. Increment `count`.
 
 *   **Step 3: Define the Recurrence Relation**
-    *   Iterate `len` from `3` to `n`.
-    *   Iterate `i` from `0` to `n - len`.
-    *   `j = i + len - 1`.
+    *   Iterate `len` from $3$ to $n$.
+    *   Iterate $i$ from $0$ to $n - len$.
+    *   $j = i + len - 1$.
     *   **Condition for `s[i...j]` to be a palindrome:**
         1.  `s.charAt(i) == s.charAt(j)` (Outer characters must match).
         2.  The inner substring `s[i+1...j-1]` must also be a palindrome. This is `dp[i+1][j-1]`.
-    *   `dp[i][j] = (s.charAt(i) == s.charAt(j) && dp[i+1][j-1])`
+    *   `dp[i][j] = (s.charAt(i) == s.charAt(j) \land dp[i+1][j-1])`
     *   If `dp[i][j]` is `true`, increment `count`.
 
 *   **Step 4: Implement and Return**
@@ -505,9 +505,8 @@ class Solution {
 ## Additional Tips
 
 *   **Draw the DP Table:** For smaller examples, physically draw out the DP table and fill it cell by cell. This helps in understanding the dependencies and verifying your recurrence relation.
-*   **Space Optimization:** After solving a problem, consider if the DP table can be optimized for space (e.g., if `dp[i][j]` only depends on the previous row, you might only need two rows instead of `m` rows).
+*   **Space Optimization:** After solving a problem, consider if the DP table can be optimized for space (e.g., if `dp[i][j]` only depends on the previous row, you might only need two rows instead of $m$ rows).
 *   **Top-Down (Memoization) vs. Bottom-Up (Tabulation):** While this guide focuses on tabulation, understanding memoization (recursive DP with caching) can sometimes be more intuitive for deriving the recurrence relation. Practice both!
-*   **Practice, Practice, Practice:** DP is a skill that improves significantly with consistent practice. Start with easier problems and gradually move to harder ones.
 *   **Identify the State:** The most crucial step is defining what `dp[i]`, `dp[i][j]`, or `dp[i][j][k]` represents. This defines your subproblems.
 *   **Look for Overlapping Subproblems and Optimal Substructure:** These are the two properties that indicate a problem can be solved with DP.
 
